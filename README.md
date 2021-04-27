@@ -16,7 +16,9 @@ These assumptioins are visualized in the figure below.
 
 **Variables to change**
 1. datapath takes a string indicating where on your computer the photometrey data are stored
-2. create_engine requires a path for the SQL database, a user name and password
+2. create_engine requires a path for the SQL database, a user name, password, and dB name
+
+Once data are organized according to the above assumptions and variables updated, the script itself will look for a table with the name photodata, create it if it does not exist, and then start looping through the sessions of each recording cohort to process and store data in the SQL dB. 
 
 
 4. (@ line 17)
@@ -28,6 +30,12 @@ datapath = "C:\\Users\\carte\Dropbox\\Carter Backup\\PostDocStuff\\RISDT\\GCamp6
 ```python
 engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}".format(user="", pw="", db = "gcampptone2"))
 ```
+
+**Python files
+1. PhotometryConstruct.py assumes all data have been collcted and you just need to build up your dB. 
+2. DayOfPhotometry.py assumes you update data everyday and thus it only needs to be run at the end of data collection for that day
+
+
 
 
  
