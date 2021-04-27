@@ -38,10 +38,6 @@ engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}".format(user=
 2. DayOfPhotometry.py assumes you update data everyday and thus it only needs to be run at the end of data collection for that day
 
 **A brief description of the code**
-Once you hit run, it will loop through all of your data, importing data using the TDT python package and then seek to normalize the GCAMP signal by the ISOS signal. Once it has normalized those signals it will then reorganize it into a list of dictionaries so that it may be bulk written to the SQL dB using SQL alchemy. 
+Once you hit run, it will loop through all of your data, importing data using the TDT python package and plotting it so that you may then annotate it. If all looks good you reply 'y' and if you need to make any changes you reply 'n'. Once you reply 'n' you will be asked where to trim it (any number between 1 and the ender of your recording in seconds) and to provide any notes that may be useful for when you further analyze the data. It will then normalize the GCAMP signal by the ISOS signal. Once it has normalized those signals it will then reorganize the data into a list of dictionaries so that it may be bulk written to the SQL dB using SQL alchemy. While this last portion of the script is somewhat slow, its speed depends on the resolution with which you collected your photometry signal. Higher resolution = higher processing time. 
 
 You may modify this script at will, but do please make attributions where appropriate. 
-
-
-
- 
