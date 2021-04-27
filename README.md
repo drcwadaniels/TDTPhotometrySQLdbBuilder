@@ -18,4 +18,15 @@ These assumptioins are visualized in the figure below.
 1. datapath takes a string indicating where on your computer the photometrey data are stored
 2. create_engine requires a path for the SQL database, a user name and password
 
+1. (@ line 17)
+```python
+datapath = "C:\\Users\\carte\Dropbox\\Carter Backup\\PostDocStuff\\RISDT\\GCamp6f PTone (6 succesful surgeries thus far)\\Photometry Data"
+```
+
+2.  (@ line 130)
+```python
+engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}".format(user="", pw="", db = "gcampptone2"))
+```
+
+
  
