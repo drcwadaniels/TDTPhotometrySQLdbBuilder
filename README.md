@@ -37,8 +37,10 @@ engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}".format(user=
 1. PhotometryConstruct.py assumes all data have been collcted and you just need to build up your dB. 
 2. DayOfPhotometry.py assumes you update data everyday and thus it only needs to be run at the end of data collection for that day
 
+**A brief description of the code**
+Once you hit run, it will loop through all of your data, importing data using the TDT python package and then seek to normalize the GCAMP signal by the ISOS signal. Once it has normalized those signals it will then reorganize it into a list of dictionaries so that it may be bulk written to the SQL dB using SQL alchemy. 
 
-
+You may modify this script at will, but do please make attributions where appropriate. 
 
 
 
