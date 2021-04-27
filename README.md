@@ -9,9 +9,11 @@ Photometry data collection inundates users with data, with a single session for 
 Here, I provide one route by which to initially process and store photometry data collected from a [TDT system](https://www.tdt.com/) into a SQL database via python. SQL databases can be queried from python or the user's preferred lanaguage. Below is a description of the script, the assumptions it makes about data organization, the variables of the script that need to be changed to run locally, and two versions of the script available to the user.  
 
 **A brief description of the code**
+
 Once you hit run, it will loop through all of your data, importing data using the TDT python package and plotting it so that you may then annotate it. If all looks good you reply 'y' and if you need to make any changes/annotations you reply 'n'. Once you reply 'n' you will be asked where to trim it (any number between 1 and the end of your recording in seconds) and to provide any notes that may be useful for when you further analyze the data. It will then normalize the GCAMP signal by the ISOS signal. Once it has normalized those signals it will then reorganize the data into a list of dictionaries so that it may be bulk written to the SQL dB using SQL alchemy. While this last portion of the script is somewhat slow, its speed depends on the resolution with which you collected your photometry signal. Higher resolution = higher processing time. 
 
 **Assumptions**
+
 1. Each recording cohort's data should be stored in a folder labeled: XXX & YYY where XXX and YYY are the animal IDs. For example, 129 & 130
 2. Within each folder, each recording session should be labeled with the date formated as DD-MM-YYYY, where D = day, M = month, and Y = year. For example, 01-20-2021
 3. In each session folder, all of the data provided by the TDT photometry system 
@@ -20,6 +22,7 @@ These assumptioins are visualized in the figure below.
 ![Assumptions](https://github.com/drcwadaniels/TDTPhotometrySQLdbBuilder/blob/main/assumptions_illustration.jpg)
 
 **Variables to change**
+
 1. datapath takes a string indicating where on your computer the photometrey data are stored
 2. create_engine requires a path for the SQL database, a user name, password, and dB name
 
@@ -37,6 +40,7 @@ engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}".format(user=
 ```
 
 **Python files**
+
 1. PhotometryConstruct.py assumes all data have been collcted and you just need to build up your dB. 
 2. Coming Soon: DayOfPhotometry.py assumes you update data everyday and thus it only needs to be run at the end of data collection for that day
 
