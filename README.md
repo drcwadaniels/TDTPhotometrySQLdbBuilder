@@ -2,6 +2,8 @@
 
 **A semi-automated protocol for building an SQL database from TDT Photometry data**
 
+*Read all of the below, it is important to understand the assumptions, variables, and two scripts available*
+
 Photometry data collection inundates users with data, with a single session for a single animal potentially genrerating millions of datapoints. The amount of data can become unwieldly. Generating a protocol for best practices can also be difficult if protocols are not established and replicated across people and time. 
 
 Here, I provide one route by which to initially process and store photometry data collected from a *TDT system* onto a SQL database via python. This SQL database can be queried from python or the user's preferred lanaguage. Below is a description of the script, the assumptions it makes about data organization, and the variables of the script that need to be changed to run locally. 
