@@ -113,7 +113,7 @@ def trim_and_process(trim,end,timex,s465,s405):
             y_df.append(np.array(trimmed_s465[i]) - y_all[i])
             dFF.append(np.multiply(100,np.divide(y_df[i],y_all[i])))
     print("you can ignore that warning: when comparing polyfit to" +
-            " the equivalent in matlab, which gives no errors it yielded the same answer")
+            " the equivalent in matlab, which gives no errors and yielded the same answer")
 
     
     return [trimmed_time, dFF, std_dFF]
