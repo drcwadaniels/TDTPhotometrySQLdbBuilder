@@ -2,7 +2,7 @@
 
 **A semi-automated protocol for building an SQL database from TDT Photometry data**
 
-*Read all of the below, it is important to understand the assumptions, variables, and two scripts available*
+*Read all of the below information, it is important to understand the assumptions, variables, and two scripts available*
 
 Photometry data collection inundates users with data, with a single session for a single animal potentially genrerating millions of data points. The amount of data can become unwieldly. Generating a protocol for best practices can also be difficult if protocols are not established and replicated across people and time. 
 
