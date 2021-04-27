@@ -5,19 +5,13 @@ import pandas as pd
 import pymysql 
 import mysql.connector 
 from mysql.connector import errorcode
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Float, Date, PrimaryKeyConstraint, VARCHAR, insert
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Float, Date, PrimaryKeyConstraint, VARCHAR
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from datetime import date
 import csv 
 import matplotlib.pyplot as plt
 from tdt import read_block, epoc_filter, download_demo_data
-
-#Photometry data location
-datapath = "C:\\Users\\carte\Dropbox\\Carter Backup\\PostDocStuff\\RISDT\\GCamp6f PTone (6 succesful surgeries thus far)\\Photometry Data"
-
-#Check to see which subjects have photometry data
-folders = os.listdir(datapath)
 
 def get_time(s465,s405):
     timex = []
@@ -164,6 +158,12 @@ def send_sql(data,subjects,session,notes):
         print("data pushed to SQL db for subject:"+subjects[s])
     SQLsession.close()
 
+
+#Photometry data location
+datapath = "C:\\Users\\carte\Dropbox\\Carter Backup\\PostDocStuff\\RISDT\\GCamp6f PTone (6 succesful surgeries thus far)\\Photometry Data"
+
+#Check to see which subjects have photometry data
+folders = os.listdir(datapath)
 
 #Update data 
 for f in folders:
