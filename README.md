@@ -12,6 +12,8 @@ Here, I provide one route by which to initially process and store photometry dat
 3. In each session folder, all of the data provided by the TDT photometry system 
 These assumptioins are visualized in the figure below. 
 
+![Assumptions](https://github.com/drcwadaniels/TDTPhotometrySQLdbBuilder/blob/main/assumptions_illustration.jpg)
+
 **Variables to change**
 1. datapath takes a string indicating where on your computer the photometrey data are stored
 2. create_engine requires a path for the SQL database, a user name and password
