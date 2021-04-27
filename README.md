@@ -31,9 +31,11 @@ datapath = "C:\\Users\\carte\Dropbox\\Carter Backup\\PostDocStuff\\RISDT\\GCamp6
 engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}".format(user="", pw="", db = "gcampptone2"))
 ```
 
-**Python files
+**Python files**
 1. PhotometryConstruct.py assumes all data have been collcted and you just need to build up your dB. 
 2. DayOfPhotometry.py assumes you update data everyday and thus it only needs to be run at the end of data collection for that day
+
+
 
 
 
