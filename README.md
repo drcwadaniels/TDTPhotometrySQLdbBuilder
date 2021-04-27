@@ -38,6 +38,6 @@ engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}".format(user=
 
 **Python files**
 1. PhotometryConstruct.py assumes all data have been collcted and you just need to build up your dB. 
-2. DayOfPhotometry.py assumes you update data everyday and thus it only needs to be run at the end of data collection for that day
+2. Coming Soon: DayOfPhotometry.py assumes you update data everyday and thus it only needs to be run at the end of data collection for that day
 
 You may modify these script at will, but do please make attributions where appropriate. 
