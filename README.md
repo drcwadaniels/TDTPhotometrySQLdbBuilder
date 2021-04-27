@@ -29,12 +29,12 @@ These assumptioins are visualized in the figure below.
 Once data are organized according to the above assumptions and variables updated, the script itself will look for a table with the name photodata, create it if it does not exist, and then start looping through the sessions of each recording cohort to process and store data in the SQL dB. 
 
 
-4. (@ line 17)
+4. (@ line 163)
 ```python
 datapath = "C:\\Users\\carte\Dropbox\\Carter Backup\\PostDocStuff\\RISDT\\GCamp6f PTone (6 succesful surgeries thus far)\\Photometry Data"
 ```
 
-2.  (@ line 130)
+2.  (@ line 124)
 ```python
 engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}".format(user="", pw="", db = "gcampptone2"))
 ```
