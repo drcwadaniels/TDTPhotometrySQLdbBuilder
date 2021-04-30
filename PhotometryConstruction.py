@@ -88,7 +88,7 @@ def trim_and_process(trim,end,timex,s465,s405):
     e_ind = []
     if len(s465) == 1:
         s_ind.append(np.where(timex[0] > trim[0])[0][0])
-        e_ind.append(np.where(timex[0]  > end)[0][0])
+        e_ind.append(np.where(np.round(timex[0])  >= np.round(end))[0][0])
         trimmed_time.append(timex[0][s_ind[0]:e_ind[0]])
         trimmed_s465.append(s465[0].data[s_ind[0]:e_ind[0]])
         trimmed_s405.append(s405[0].data[s_ind[0]:e_ind[0]])
@@ -102,7 +102,7 @@ def trim_and_process(trim,end,timex,s465,s405):
     else:
         for i in range(0, len(s465)):
             s_ind.append(np.where(timex[i] > trim[i])[0][0])
-            e_ind.append(np.where(timex[i]  > end)[0][0])
+            e_ind.append(np.where(np.round(timex[i])  >= np.round(end))[0][0])
             trimmed_time.append(timex[i][s_ind[i]:e_ind[i]])
             trimmed_s465.append(s465[i].data[s_ind[i]:e_ind[i]])
             trimmed_s405.append(s405[i].data[s_ind[i]:e_ind[i]])
@@ -121,7 +121,7 @@ def trim_and_process(trim,end,timex,s465,s405):
 
 def send_sql(data,subjects,session,notes):
     #sql engine for pandas (presumably)
-    engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}".format(user="", pw="", db = "gcampptone2"))
+    engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}".format(user="root", pw="", db = "gcampptone2"))
     md= MetaData(engine)
     for s in range(0,len(notes)):
         if not engine.dialect.has_table(engine,'photodata'):
@@ -172,6 +172,7 @@ for f in folders:
     for s in sessions:
         Subjects_465 = []
         Subjects_405 = []
+        Events = []
         final_datapath = os.path.join(obtained_datapath,s)
         import_tdt = read_block(final_datapath)
         if '&' in f:
@@ -194,6 +195,7 @@ for f in folders:
             Subjects_405.append(import_tdt.streams['_405A'])
             Subjects_465.append(import_tdt.streams['_465C'])
             Subjects_405.append(import_tdt.streams['_405C'])
+            
         time = get_time(Subjects_465,Subjects_405)
         trim, note = evaluate_rawdata(time, Subjects_465, Subjects_405, subjs)
         processed_data = trim_and_process(trim,import_tdt.info.duration.seconds, time, Subjects_465, Subjects_405)
