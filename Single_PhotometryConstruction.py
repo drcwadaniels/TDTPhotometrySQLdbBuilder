@@ -5,13 +5,19 @@ import pandas as pd
 import pymysql 
 import mysql.connector 
 from mysql.connector import errorcode
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Float, Date, PrimaryKeyConstraint, VARCHAR
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Float, Date, PrimaryKeyConstraint, VARCHAR, insert
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from datetime import date
 import csv 
 import matplotlib.pyplot as plt
 from tdt import read_block, epoc_filter, download_demo_data
+
+#Photometry data location
+datapath = "C:\\Users\\carte\\Dropbox\\Carter Local\\PostDocStuff\\RISDT\\PTone Fiber\\Photometry Data"
+
+#Check to see which subjects have photometry data
+folders = os.listdir(datapath)
 
 def get_time(s465,s405):
     timex = []
@@ -88,7 +94,7 @@ def trim_and_process(trim,end,timex,s465,s405):
     e_ind = []
     if len(s465) == 1:
         s_ind.append(np.where(timex[0] > trim[0])[0][0])
-        e_ind.append(np.where(np.round(timex[0])  >= np.round(end))[0][0])
+        e_ind.append(np.where(timex[0]  > end)[0][0])
         trimmed_time.append(timex[0][s_ind[0]:e_ind[0]])
         trimmed_s465.append(s465[0].data[s_ind[0]:e_ind[0]])
         trimmed_s405.append(s405[0].data[s_ind[0]:e_ind[0]])
@@ -102,7 +108,7 @@ def trim_and_process(trim,end,timex,s465,s405):
     else:
         for i in range(0, len(s465)):
             s_ind.append(np.where(timex[i] > trim[i])[0][0])
-            e_ind.append(np.where(np.round(timex[i])  >= np.round(end))[0][0])
+            e_ind.append(np.where(timex[i]  > end)[0][0])
             trimmed_time.append(timex[i][s_ind[i]:e_ind[i]])
             trimmed_s465.append(s465[i].data[s_ind[i]:e_ind[i]])
             trimmed_s405.append(s405[i].data[s_ind[i]:e_ind[i]])
@@ -113,7 +119,7 @@ def trim_and_process(trim,end,timex,s465,s405):
             y_df.append(np.array(trimmed_s465[i]) - y_all[i])
             dFF.append(np.multiply(100,np.divide(y_df[i],y_all[i])))
     print("you can ignore that warning: when comparing polyfit to" +
-            " the equivalent in matlab, which gives no errors and yielded the same answer")
+            " the equivalent in matlab, which gives no errors it yielded the same answer")
 
     
     return [trimmed_time, dFF, std_dFF]
@@ -121,10 +127,11 @@ def trim_and_process(trim,end,timex,s465,s405):
 
 def send_sql(data,subjects,session,notes):
     #sql engine for pandas (presumably)
-    engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}".format(user="root", pw="", db = "gcampptone2"))
+    engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}".format(user="root", pw="u$watchmenR15!", db = "fiberptone"))
     md= MetaData(engine)
+    test_conn = engine.connect()
     for s in range(0,len(notes)):
-        if not engine.dialect.has_table(engine,'photodata'):
+        if not engine.dialect.has_table(test_conn,'photodata'):
             photodata = Table('photodata', md, 
                 Column('idx', Integer, primary_key=True, nullable=False, autoincrement=True),
                 Column('Subject',Integer), 
@@ -159,47 +166,40 @@ def send_sql(data,subjects,session,notes):
     SQLsession.close()
 
 
-#Photometry data location
-datapath = "C:\\Users\\carte\Dropbox\\Carter Backup\\PostDocStuff\\RISDT\\GCamp6f PTone (6 succesful surgeries thus far)\\Photometry Data"
-
-#Check to see which subjects have photometry data
-folders = os.listdir(datapath)
-
 #Update data 
 for f in folders:
     obtained_datapath = os.path.join(datapath,f)
     sessions = os.listdir(obtained_datapath)
     for s in sessions:
-        Subjects_465 = []
-        Subjects_405 = []
-        Events = []
-        final_datapath = os.path.join(obtained_datapath,s)
-        import_tdt = read_block(final_datapath)
-        if '&' in f:
-            subjs = f.split()
-            subjs.remove('&')
-        else:
-            subjs = [f]
-        if len(subjs) == 1:
-            test465A = import_tdt.streams['_465A'].data[1000]
-            test465C = import_tdt.streams['_465C'].data[1000] 
-            if test465A > test465C:
+        if s == date.today().strftime("%m-%d-%Y"):
+            Subjects_465 = []
+            Subjects_405 = []
+            final_datapath = os.path.join(obtained_datapath,s)
+            import_tdt = read_block(final_datapath)
+            if '&' in f:
+                subjs = f.split()
+                subjs.remove('&')
+            else:
+                subjs = [f]
+            if len(subjs) == 1:
+                test465A = import_tdt.streams['_465A'].data[1000]
+                test465C = import_tdt.streams['_465C'].data[1000] 
+                if test465A > test465C:
+                    Subjects_465.append(import_tdt.streams['_465A'])
+                    Subjects_405.append(import_tdt.streams['_405A'])
+                else:
+                    Subjects_465.append(import_tdt.streams['_465C'])
+                    Subjects_405.append(import_tdt.streams['_405C'])
+
+            else:
                 Subjects_465.append(import_tdt.streams['_465A'])
                 Subjects_405.append(import_tdt.streams['_405A'])
-            else:
                 Subjects_465.append(import_tdt.streams['_465C'])
                 Subjects_405.append(import_tdt.streams['_405C'])
-
-        else:
-            Subjects_465.append(import_tdt.streams['_465A'])
-            Subjects_405.append(import_tdt.streams['_405A'])
-            Subjects_465.append(import_tdt.streams['_465C'])
-            Subjects_405.append(import_tdt.streams['_405C'])
-            
-        time = get_time(Subjects_465,Subjects_405)
-        trim, note = evaluate_rawdata(time, Subjects_465, Subjects_405, subjs)
-        processed_data = trim_and_process(trim,import_tdt.info.duration.seconds, time, Subjects_465, Subjects_405)
-        send_sql(processed_data,subjs,s,note)            
+            time = get_time(Subjects_465,Subjects_405)
+            trim, note = evaluate_rawdata(time, Subjects_465, Subjects_405, subjs)
+            processed_data = trim_and_process(trim,import_tdt.info.duration.seconds-1, time, Subjects_465, Subjects_405)
+            send_sql(processed_data,subjs,s,note)            
         
 
         
