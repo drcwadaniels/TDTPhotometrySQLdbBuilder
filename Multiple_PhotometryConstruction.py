@@ -127,7 +127,7 @@ def trim_and_process(trim,end,timex,s465,s405):
 
 def send_sql(data,subjects,session,notes):
     #sql engine for pandas (presumably)
-    engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}".format(user="root", pw="u$watchmenR15!", db = "fiberptone"))
+    engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}".format(user="root", pw="", db = "fiberptone"))
     md= MetaData(engine)
     test_conn = engine.connect()
     for s in range(0,len(notes)):
